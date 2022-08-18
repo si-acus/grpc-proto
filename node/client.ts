@@ -35,6 +35,15 @@ function onClientReady() {
     }
     console.log(result)
   })
+
+	// Sample Server Streaming
+	const stream1 = client.RandomNumbers({maxVal: 85})
+  stream1.on("data", (chunk)=> {
+    console.log(chunk)
+  })
+  stream1.on("end", () => {
+    console.log("communication ended")
+  })
 	
 }
 

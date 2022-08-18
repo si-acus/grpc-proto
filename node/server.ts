@@ -32,7 +32,24 @@ function getServer() {
     PingPong: (req, res) => {
       console.log(req.request)
       res(null, {message: "Pong"})
-    }
+    },
+
+    //Sample Server Streaming
+    RandomNumbers: (call) => {
+        const { maxVal = 10 } = call.request
+        console.log({maxVal})
+  
+        let runCount = 0
+        const id = setInterval(() => {
+          runCount = ++runCount
+          call.write({num: Math.floor(Math.random() * maxVal)})
+  
+          if(runCount >= 10) {
+            clearInterval(id)
+            call.end()
+          }
+        }, 500)
+      },
    
   } as SampleHandlers)
 

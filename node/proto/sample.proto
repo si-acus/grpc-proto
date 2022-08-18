@@ -4,6 +4,7 @@ package samplePackage;
 
 service Sample {
   rpc PingPong(PingRequest) returns (PongResponse) {};
+	rpc RandomNumbers(NumberRequest) returns (stream NumberResponse) {};
 }
 
 message PingRequest {
@@ -13,5 +14,14 @@ message PingRequest {
 message PongResponse {
   string message = 1;
 }
+
+message NumberRequest {
+    int32 maxVal = 1;
+  }
+  
+message NumberResponse {
+  int32 num = 1;
+}
+
 
 
