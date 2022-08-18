@@ -2,6 +2,8 @@
 
 import type * as grpc from '@grpc/grpc-js'
 import type { MethodDefinition } from '@grpc/proto-loader'
+import type { ChatRequest as _samplePackage_ChatRequest, ChatRequest__Output as _samplePackage_ChatRequest__Output } from '../samplePackage/ChatRequest';
+import type { ChatResponse as _samplePackage_ChatResponse, ChatResponse__Output as _samplePackage_ChatResponse__Output } from '../samplePackage/ChatResponse';
 import type { NumberRequest as _samplePackage_NumberRequest, NumberRequest__Output as _samplePackage_NumberRequest__Output } from '../samplePackage/NumberRequest';
 import type { NumberResponse as _samplePackage_NumberResponse, NumberResponse__Output as _samplePackage_NumberResponse__Output } from '../samplePackage/NumberResponse';
 import type { PingRequest as _samplePackage_PingRequest, PingRequest__Output as _samplePackage_PingRequest__Output } from '../samplePackage/PingRequest';
@@ -10,6 +12,11 @@ import type { TodoRequest as _samplePackage_TodoRequest, TodoRequest__Output as 
 import type { TodoResponse as _samplePackage_TodoResponse, TodoResponse__Output as _samplePackage_TodoResponse__Output } from '../samplePackage/TodoResponse';
 
 export interface SampleClient extends grpc.Client {
+  Chat(metadata: grpc.Metadata, options?: grpc.CallOptions): grpc.ClientDuplexStream<_samplePackage_ChatRequest, _samplePackage_ChatResponse__Output>;
+  Chat(options?: grpc.CallOptions): grpc.ClientDuplexStream<_samplePackage_ChatRequest, _samplePackage_ChatResponse__Output>;
+  chat(metadata: grpc.Metadata, options?: grpc.CallOptions): grpc.ClientDuplexStream<_samplePackage_ChatRequest, _samplePackage_ChatResponse__Output>;
+  chat(options?: grpc.CallOptions): grpc.ClientDuplexStream<_samplePackage_ChatRequest, _samplePackage_ChatResponse__Output>;
+  
   PingPong(argument: _samplePackage_PingRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: grpc.requestCallback<_samplePackage_PongResponse__Output>): grpc.ClientUnaryCall;
   PingPong(argument: _samplePackage_PingRequest, metadata: grpc.Metadata, callback: grpc.requestCallback<_samplePackage_PongResponse__Output>): grpc.ClientUnaryCall;
   PingPong(argument: _samplePackage_PingRequest, options: grpc.CallOptions, callback: grpc.requestCallback<_samplePackage_PongResponse__Output>): grpc.ClientUnaryCall;
@@ -36,6 +43,8 @@ export interface SampleClient extends grpc.Client {
 }
 
 export interface SampleHandlers extends grpc.UntypedServiceImplementation {
+  Chat: grpc.handleBidiStreamingCall<_samplePackage_ChatRequest__Output, _samplePackage_ChatResponse>;
+  
   PingPong: grpc.handleUnaryCall<_samplePackage_PingRequest__Output, _samplePackage_PongResponse>;
   
   RandomNumbers: grpc.handleServerStreamingCall<_samplePackage_NumberRequest__Output, _samplePackage_NumberResponse>;
@@ -45,6 +54,7 @@ export interface SampleHandlers extends grpc.UntypedServiceImplementation {
 }
 
 export interface SampleDefinition extends grpc.ServiceDefinition {
+  Chat: MethodDefinition<_samplePackage_ChatRequest, _samplePackage_ChatResponse, _samplePackage_ChatRequest__Output, _samplePackage_ChatResponse__Output>
   PingPong: MethodDefinition<_samplePackage_PingRequest, _samplePackage_PongResponse, _samplePackage_PingRequest__Output, _samplePackage_PongResponse__Output>
   RandomNumbers: MethodDefinition<_samplePackage_NumberRequest, _samplePackage_NumberResponse, _samplePackage_NumberRequest__Output, _samplePackage_NumberResponse__Output>
   TodoList: MethodDefinition<_samplePackage_TodoRequest, _samplePackage_TodoResponse, _samplePackage_TodoRequest__Output, _samplePackage_TodoResponse__Output>

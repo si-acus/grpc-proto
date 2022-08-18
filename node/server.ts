@@ -5,6 +5,8 @@ import { ProtoGrpcType } from './proto/sample'
 import { SampleHandlers } from './proto/samplePackage/Sample'
 import { TodoResponse } from './proto/samplePackage/TodoResponse'
 import { TodoRequest } from './proto/samplePackage/TodoRequest'
+import { ChatRequest } from './proto/samplePackage/ChatRequest'
+import { ChatResponse } from './proto/samplePackage/ChatResponse'
 
 const PORT = 8082
 const PROTO_FILE = './proto/sample.proto'
@@ -28,6 +30,8 @@ function main() {
 }
 //init todo list
 const todoList: TodoResponse = {todos :[] }
+//init username
+const callObjByUsername = new Map<string, grpc.ServerDuplexStream<ChatRequest, ChatResponse>>()
 
 function getServer() {
 	const server = new grpc.Server()
@@ -67,6 +71,49 @@ function getServer() {
       })
     },
 
+
+		//Sample Bidirectional Streaming
+		Chat: (call) => {
+      call.on("data", (req) => {
+        const username = call.metadata.get('username')[0] as string
+        const msg = req.message
+        console.log(`${username}:`, req.message)
+
+
+        for(let [user, usersCall] of callObjByUsername) {
+          if(username !== user) {
+            usersCall.write({
+              username: username,
+              message: msg
+            })
+          }
+        }
+
+        if (callObjByUsername.get(username) === undefined) {
+          callObjByUsername.set(username, call)
+        }
+      })
+
+      call.on("end", () => {
+        const username = call.metadata.get('username')[0] as string
+        callObjByUsername.delete(username)
+        for(let [user, usersCall] of callObjByUsername) {
+            usersCall.write({
+              username: username,
+              message: "Has Left the Chat!"
+            })
+        }
+        console.log(`${username} is ending their chat session`)
+
+        call.write({
+          username: "Server",
+          message: `See you later ${username}`
+        })
+
+        call.end()
+      })
+
+    }
 	} as SampleHandlers)
 
 	return server
