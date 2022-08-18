@@ -44,6 +44,19 @@ function onClientReady() {
   stream1.on("end", () => {
     console.log("communication ended")
   })
+
+	//Sample Client Streaming
+	const stream2 = client.TodoList((err, result) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    console.log(result)
+  })
+  stream2.write({todo: "sleep", status: "Never"})
+  stream2.write({todo: "code", status: "Doing"})
+  stream2.write({todo: "eat", status: "Done"})
+  stream2.end()
 	
 }
 
