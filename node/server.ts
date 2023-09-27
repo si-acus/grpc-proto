@@ -36,40 +36,40 @@ const callObjByUsername = new Map<string, grpc.ServerDuplexStream<ChatRequest, C
 function getServer() {
 	const server = new grpc.Server()
 	server.addService(samplePackage.Sample.service, {
-		// Sample Unary
-		PingPong: (req, res) => {
-			console.log(req.request)
-			res(null, { message: "Pong" })
-		},
+		// // Sample Unary
+		// PingPong: (req, res) => {
+		// 	console.log(req.request)
+		// 	res(null, { message: "Pong" })
+		// },
 
-		//Sample Server Streaming
-		RandomNumbers: (call) => {
-			const { maxVal = 10 } = call.request
-			console.log({ maxVal })
+		// //Sample Server Streaming
+		// RandomNumbers: (call) => {
+		// 	const { maxVal = 10 } = call.request
+		// 	console.log({ maxVal })
 
-			let runCount = 0
-			const id = setInterval(() => {
-				runCount = ++runCount
-				call.write({ num: Math.floor(Math.random() * maxVal) })
+		// 	let runCount = 0
+		// 	const id = setInterval(() => {
+		// 		runCount = ++runCount
+		// 		call.write({ num: Math.floor(Math.random() * maxVal) })
 
-				if (runCount >= 10) {
-					clearInterval(id)
-					call.end()
-				}
-			}, 500)
-		},
+		// 		if (runCount >= 10) {
+		// 			clearInterval(id)
+		// 			call.end()
+		// 		}
+		// 	}, 500)
+		// },
 
 		//Sample Client Streaming
-		TodoList: (call, callback) => {
-      call.on("data", (chunk: TodoRequest) => {
-        todoList.todos?.push(chunk)
-        console.log(chunk)
-      })
+		// TodoList: (call, callback) => {
+    //   call.on("data", (chunk: TodoRequest) => {
+    //     todoList.todos?.push(chunk)
+    //     console.log(chunk)
+    //   })
 
-      call.on("end", () => {
-        callback(null, {todos: todoList.todos})
-      })
-    },
+    //   call.on("end", () => {
+    //     callback(null, {todos: todoList.todos})
+    //   })
+    // },
 
 
 		//Sample Bidirectional Streaming
@@ -114,6 +114,8 @@ function getServer() {
       })
 
     }
+
+
 	} as SampleHandlers)
 
 	return server

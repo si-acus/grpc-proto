@@ -18,5 +18,5 @@ yarn start
 
 ### Runs out client
 ```
-yarn client
+yarn client 'name'
 ```
